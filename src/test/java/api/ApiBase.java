@@ -27,11 +27,11 @@ public class ApiBase {
         return response;
     }
 
-    public Response getRequestWithParam(String endPoint, Integer responseCode, int id) {
+    public Response getRequestWithParam(String endPoint, Integer responseCode, String paramName, int id) {
         Response response = RestAssured.given()
                 .spec(specification)
                 .when()
-                .pathParam("id", id)
+                .pathParam(paramName, id)
                 .log().all()
                 .get(endPoint)
                 .then().log().all()

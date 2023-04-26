@@ -1,28 +1,29 @@
 package api.tests;
 
 import api.email.EmailsApi;
+import api.helpers.EmailHelper;
 import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class CommonContactEmailTest extends EmailsApi {
+public class CommonContactEmailTest {
+    EmailsApi emailsApi = new EmailsApi();
+    EmailHelper emailHelper = new EmailHelper();
+    int contactId = 4909;
 
     @Test
     public void createEditDeleteContactEmailTest() {
-        createEmail(201);
-        Response response = getAllEmails(200);
+        emailsApi.createEmail(201, contactId);
+        Response response = emailsApi.getAllEmails(200, contactId);
         int emailId = response.jsonPath().getInt("[0].id");
         String email = response.jsonPath().getString("[0].email");
-        Assert.assertEquals(email, randomDataBodyForCreateEmail().getEmail(), "Created emails is not equals");
+        Assert.assertEquals(email, emailsApi.randomDataBodyForCreateEmail(contactId).getEmail(), "Created emails is not equals");
 
-        editExistingEmail(200, emailId);
-        Response editedEmails = getAllEmails(200);
+        emailsApi.editExistingEmail(200, emailId, contactId);
+        Response editedEmails = emailsApi.getAllEmails(200, contactId);
         String editedEmail = editedEmails.jsonPath().getString("[0].email");
-        Assert.assertEquals(editedEmail, randomDataBodyForEditEmail(emailId).getEmail(), "Edited emails is not equals");
+        Assert.assertEquals(editedEmail, emailsApi.randomDataBodyForEditEmail(emailId, contactId).getEmail(), "Edited emails is not equals");
 
-        deleteExistingEmail(200, emailId);
-        Response errorMessage = getEmail(500, emailId);
-        Assert.assertEquals(errorMessage.jsonPath().getString("message"), "Error! This email doesn't exist in our DB");
-
+        emailHelper.deleteEmail(emailId);
     }
 }

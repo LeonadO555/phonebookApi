@@ -30,7 +30,6 @@ public class CommonContactTest extends ContactApi {
         Assert.assertEquals(actualEditedResponse.jsonPath().getString("description"), randomDataBodyForEditContact(contactId).getDescription(), "Description contact not equal");
 
         deleteExistingContact(200, contactId);
-
         Response actualDeletedResponse = getContact(500, contactId);
         Assert.assertEquals(actualDeletedResponse.jsonPath().getString("message"), "Error! This contact doesn't exist in our DB");
     }

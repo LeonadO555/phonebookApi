@@ -28,7 +28,7 @@ public class ContactApi extends ApiBase {
         return dto;
     }
 
-    public Response createContact(Integer code) {
+    public Response createNewContact(Integer code) {
         String endpoint = "/api/contact";
         response = postRequest(endpoint, code, randomDataBodyForCreateContact());
         response.as(ContactDto.class);
